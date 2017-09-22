@@ -29,10 +29,13 @@ namespace OData.Sample.Controllers
             IQueryable<Data.Person> people = this.DbContext.People;
 
             var iqueryableToReturn = options.ApplyTo(people);
+            //return iqueryableToReturn; // It should return OK here (even for GroupBy)
 
             var objectsQueryable = iqueryableToReturn as IQueryable<object>;
 
             var objectsExecuted = objectsQueryable.ToList();
+
+            Type type = objectsExecuted.First().GetType();
 
             return objectsExecuted.AsQueryable();
         }
