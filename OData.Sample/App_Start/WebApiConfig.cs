@@ -35,7 +35,7 @@ namespace OData.Sample
 
             config.MapODataServiceRoute(
                 routeName: "api",
-                routePrefix: "api",
+                routePrefix: null,
                 model: edmModel
             );
         }
