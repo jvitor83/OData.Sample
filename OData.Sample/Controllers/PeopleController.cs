@@ -14,23 +14,18 @@ namespace OData.Sample.Controllers
     public class PeopleController : ApiController
     {
         public DatabaseModel DbContext { get; set; }
-
         public PeopleController()
         {
             this.DbContext = new DatabaseModel();
         }
+        protected override void Dispose(bool disposing)
+        {
+            this.DbContext.Dispose();
+            base.Dispose(disposing);
+        }
 
-        //[EnableQuery]
         public IQueryable Get(ODataQueryOptions<Data.Person> options)
         {
-            var settings = new ODataValidationSettings()
-            {
-                // Initialize settings as needed.
-                AllowedFunctions = AllowedFunctions.AllMathFunctions
-            };
-
-            options.Validate(settings);
-
             IQueryable<Data.Person> people = this.DbContext.People;
 
             var iqueryableToReturn = options.ApplyTo(people);
@@ -41,11 +36,26 @@ namespace OData.Sample.Controllers
 
             return objectsExecuted.AsQueryable();
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            this.DbContext.Dispose();
-            base.Dispose(disposing);
-        }
     }
+
+    //public class PeopleController : ODataController
+    //{
+    //    public DatabaseModel DbContext { get; set; }
+    //    public PeopleController()
+    //    {
+    //        this.DbContext = new DatabaseModel();
+    //    }
+    //    protected override void Dispose(bool disposing)
+    //    {
+    //        this.DbContext.Dispose();
+    //        base.Dispose(disposing);
+    //    }
+        
+    //    [EnableQuery]
+    //    public IQueryable<Data.Person> Get()
+    //    {
+    //        IQueryable<Data.Person> people = this.DbContext.People;
+    //        return people;
+    //    }
+    //}
 }
