@@ -20,14 +20,8 @@ namespace OData.Sample.Controllers
             this.DbContext = new DatabaseModel();
         }
 
-        //[EnableQueryAttribute(
-        //    AllowedArithmeticOperators = AllowedArithmeticOperators.All,
-        //    AllowedFunctions = AllowedFunctions.All,
-        //    AllowedLogicalOperators = AllowedLogicalOperators.All,
-        //    AllowedQueryOptions = AllowedQueryOptions.All
-        //    )]
         //[EnableQuery]
-        public IQueryable Get(ODataQueryOptions<Models.Person> options)
+        public IQueryable Get(ODataQueryOptions<Data.Person> options)
         {
             var settings = new ODataValidationSettings()
             {
@@ -39,20 +33,13 @@ namespace OData.Sample.Controllers
 
             IQueryable<Data.Person> people = this.DbContext.People;
 
-            IQueryable<Models.Person> peopleProjected = people.Select(p => new Models.Person() {
-                Id = p.Id,
-                Name = p.Name,
-                DateOfBirth = p.DateOfBirth
-            });
+            var iqueryableToReturn = options.ApplyTo(people);
 
-            // Here the query was not yet executed, so, we have the possibility to apply the query options at the "Api Model Person" and it will be projected to the Query at Database
+            var objectsQueryable = iqueryableToReturn as IQueryable<object>;
 
+            var objectsExecuted = objectsQueryable.ToList();
 
-            IQueryable iqueryableWithOptionsApplied = options.ApplyTo(peopleProjected);
-
-            //IQueryable<Models.Person> iqueryableToReturn = iqueryableWithOptionsApplied as IQueryable<Models.Person>;
-
-            return iqueryableWithOptionsApplied;
+            return objectsExecuted.AsQueryable();
         }
 
         protected override void Dispose(bool disposing)

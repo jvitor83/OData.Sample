@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.OData.Builder;
 using System.Web.OData.Extensions;
+using System.Web.OData.Formatter;
 
 namespace OData.Sample
 {
@@ -26,19 +27,17 @@ namespace OData.Sample
 
             ODataModelBuilder builder = new ODataConventionModelBuilder(config);
 
-            builder.DataServiceVersion = new Version(4, 0);
-            builder.EntitySet<Person>("People");
+            //builder.DataServiceVersion = new Version(4, 0);
+            builder.EntitySet<Data.Person>("People");
 
             
             var edmModel = builder.GetEdmModel();
 
             config.MapODataServiceRoute(
                 routeName: "api",
-                routePrefix: null,
+                routePrefix: "api",
                 model: edmModel
             );
-
-            //config.AddODataQueryFilter();
         }
     }
 }

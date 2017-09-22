@@ -26,6 +26,7 @@ namespace OData.Sample.Data
         public DatabaseModel()
             : base("name=DatabaseModel")
         {
+            var instance = System.Data.Entity.SqlServer.SqlProviderServices.Instance;
         }
 
         // Add a DbSet for each entity type that you want to include in your model. For more information 
